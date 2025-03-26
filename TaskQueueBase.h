@@ -47,5 +47,5 @@ struct TaskQueueDelete
     {
         pTaskQueue->DeleteObject();
     }
-}
+};
 #endif /* __TASKQUEUEBASE_H__ */
