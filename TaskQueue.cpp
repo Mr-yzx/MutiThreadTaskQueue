@@ -51,7 +51,7 @@ void TaskQueue::AddDelayTask(std::unique_ptr<Task> pTask, uint64_t ms)
 
     std::unique_lock<std::mutex> lock(m_mutex);
     delayTaskInfo.m_order = ++m_threadOrder;
-    m_delayTaskMap.insert(std::pair<TaskQueue::DelayTask, std::unique_ptr<Task>>(delayTaskInfo, std::move(pTask)));
+    m_delayTaskMap[delayTaskInfo] = std::move(pTask);
 
     Notify();
 
@@ -115,7 +115,7 @@ TaskQueue::TaskInfo TaskQueue::GetNextTask()
         return task;
     }
 
-    if (!m_delayTaskMap.empty())
+    if (!m_delayTaskMap.size())
     {
         auto iter = m_delayTaskMap.begin();
         auto &delayInfo = iter->first;

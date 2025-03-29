@@ -51,9 +51,14 @@ bool TimerEvent::wait(int pTimeout, int pWarnTime)
 
     bool timeout_flag = (pTimeout == TIMER_EVENT_WAIT_FOREVER) ? false : true;
 
-    if (warn_flag && timeout_flag)
+    if (warn_flag)
     {
         warn_ts = GetTimeSpec(pWarnTime);
+        //timeout_ts = GetTimeSpec(pTimeout);
+    }
+
+    if (!timeout_flag)
+    {
         timeout_ts = GetTimeSpec(pTimeout);
     }
 
@@ -102,5 +107,5 @@ bool TimerEvent::wait(int pTimeout, int pWarnTime)
 
 bool TimerEvent::wait(int pTimeout)
 {
-    return false;
+    return wait(pTimeout, pTimeout == TIMER_EVENT_WAIT_FOREVER? 3000 : TIMER_EVENT_WAIT_FOREVER);
 }
