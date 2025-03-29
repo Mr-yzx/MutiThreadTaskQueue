@@ -15,7 +15,7 @@ public:
 
     virtual void AddTask(std::unique_ptr<Task> pTask) = 0;
 
-    virtual void AddDelayTask(std::unique_ptr<Task> pTask, uint32_t ms) = 0;
+    virtual void AddDelayTask(std::unique_ptr<Task> pTask, uint64_t ms) = 0;
 
     static TaskQueueBase *GetCurrentObj();
 
@@ -34,6 +34,7 @@ protected:
         CurrentTaskQueue(const CurrentTaskQueue &) = delete;
 
         CurrentTaskQueue &operator=(const CurrentTaskQueue &) = delete;
+        ~CurrentTaskQueue();
     private:
         TaskQueueBase *m_tmpQueue;
     };

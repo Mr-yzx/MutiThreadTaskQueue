@@ -13,7 +13,7 @@ class Task
 public:
     virtual ~Task() = default;
 
-    virtual void run() = 0;
+    virtual bool run() = 0;
 };
 
 /*
@@ -25,15 +25,16 @@ template <typename Closure>
 class TaskClosure : public Task
 {
 public:
-    explicit TaskClosure(Closure &&pClosure) : m_closure(std::forawrd<Closure>(pClosure))
+    explicit TaskClosure(Closure &&pClosure) : m_closure(std::forward<Closure>(pClosure))
     {
 
     }
 
 private:
-    void run() override
+    bool run() override
     {
         m_closure();
+        return true;
     }
     typename std::decay<Closure>::type m_closure;
 };
@@ -67,6 +68,6 @@ private:
 template <typename Closure>
 std::unique_ptr<Task> TransferToTask(Closure &&pClosure)
 {
-    return std::unique_ptr<TaskClosure<Closure>>(std::forward<Closure>(pClosure));
+    return std::unique_ptr<Task>(new TaskClosure<Closure>(std::forward<Closure>(pClosure)));
 }
 #endif /* __TASK_H__ */
